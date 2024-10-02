@@ -1,0 +1,172 @@
+require:
+ - rubocop-performance
+ - rubocop-rubycw
+
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'coverage/**/*'
+    - 'doc/**/*'
+    - 'log/**/*'
+    - 'public/**/*'
+  # Default formatter will be used if no `-f/--format` option is given.
+  DefaultFormatter: progress
+  # Cop names are displayed in offense messages by default. Change behavior
+  # by overriding DisplayCopNames, or by giving the `--no-display-cop-names`
+  # option.
+  DisplayCopNames: true
+  # Style guide URLs are not displayed in offense messages by default. Change
+  # behavior by overriding `DisplayStyleGuide`, or by giving the
+  # `-S/--display-style-guide` option.
+  DisplayStyleGuide: true
+  # When specifying style guide URLs, any paths and/or fragments will be
+  # evaluated relative to the base URL.
+  StyleGuideBaseURL: https://rubystyle.guide
+  # Documentation URLs will be constructed using the base URL.
+  DocumentationBaseURL: https://docs.rubocop.org/rubocop
+  # Documentation URLs will end with this extension.
+  DocumentationExtension: .html
+  # Extra details are not displayed in offense messages by default. Change
+  # behavior by overriding ExtraDetails, or by giving the
+  # `-E/--extra-details` option.
+  ExtraDetails: true
+  # Additional cops that do not reference a style guide rule may be enabled by
+  # default. Change behavior by overriding `StyleGuideCopsOnly`, or by giving
+  # the `--only-guide-cops` option.
+  StyleGuideCopsOnly: false
+  # All cops except the ones configured `Enabled: false` in this file are enabled by default.
+  # Change this behavior by overriding either `DisabledByDefault` or `EnabledByDefault`.
+  # When `DisabledByDefault` is `true`, all cops in the default configuration
+  # are disabled, and only cops in user configuration are enabled. This makes
+  # cops opt-in instead of opt-out. Note that when `DisabledByDefault` is `true`,
+  # cops in user configuration will be enabled even if they don't set the
+  # Enabled parameter.
+  # When `EnabledByDefault` is `true`, all cops, even those configured `Enabled: false`
+  # in this file are enabled by default. Cops can still be disabled in user configuration.
+  # Note that it is invalid to set both EnabledByDefault and DisabledByDefault
+  # to true in the same configuration.
+  EnabledByDefault: false
+  DisabledByDefault: false
+  # New cops introduced between major versions are set to a special pending status
+  # and are not enabled by default with warning message.
+  # Change this behavior by overriding either `NewCops: enable` or `NewCops: disable`.
+  # When `NewCops` is `enable`, pending cops are enabled in bulk. Can be overridden by
+  # the `--enable-pending-cops` command-line option.
+  # When `NewCops` is `disable`, pending cops are disabled in bulk. Can be overridden by
+  # the `--disable-pending-cops` command-line option.
+  NewCops: enable
+  # Enables the result cache if `true`. Can be overridden by the `--cache` command
+  # line option.
+  UseCache: true
+  # Threshold for how many files can be stored in the result cache before some
+  # of the files are automatically removed.
+  MaxFilesInCache: 20000
+  # The cache will be stored in "rubocop_cache" under this directory. If
+  # CacheRootDirectory is ~ (nil), which it is by default, the root will be
+  # taken from the environment variable `$XDG_CACHE_HOME` if it is set, or if
+  # `$XDG_CACHE_HOME` is not set, it will be `$HOME/.cache/`.
+  # The CacheRootDirectory can be overwritten by passing the `--cache-root` command
+  # line option or by setting `$RUBOCOP_CACHE_ROOT` environment variable.
+  CacheRootDirectory: ~
+  # It is possible for a malicious user to know the location of RuboCop's cache
+  # directory by looking at CacheRootDirectory, and create a symlink in its
+  # place that could cause RuboCop to overwrite unintended files, or read
+  # malicious input. If you are certain that your cache location is secure from
+  # this kind of attack, and wish to use a symlinked cache location, set this
+  # value to "true".
+  AllowSymlinksInCacheRootDirectory: false
+  # What MRI version of the Ruby interpreter is the inspected code intended to
+  # run on? (If there is more than one, set this to the lowest version.)
+  # If a value is specified for TargetRubyVersion then it is used. Acceptable
+  # values are specified as a float (i.e. 3.0); the teeny version of Ruby
+  # should not be included. If the project specifies a Ruby version in the
+  # .tool-versions or .ruby-version files, Gemfile or gems.rb file, RuboCop will
+  # try to determine the desired version of Ruby by inspecting the
+  # .tool-versions file first, then .ruby-version, followed by the Gemfile.lock
+  # or gems.locked file. (Although the Ruby version is specified in the Gemfile
+  # or gems.rb file, RuboCop reads the final value from the lock file.) If the
+  # Ruby version is still unresolved, RuboCop will use the oldest officially
+  # supported Ruby version (currently Ruby 2.7).
+  TargetRubyVersion: ~
+  # You can specify the parser engine. There are two options available:
+  # - `parser_whitequark` ... https://github.com/whitequark/parser
+  # - `parser_prism` ... https://github.com/ruby/prism (`Prism::Translation::Parser`)
+  # By default, `parser` is used. For the `TargetRubyVersion` value, `parser` can be specified for versions `2.0` and above.
+  # `parser_prism` can be specified for versions `3.3` and above. `parser_prism` is faster but still considered experimental.
+  ParserEngine: parser_whitequark
+  # Determines if a notification for extension libraries should be shown when
+  # rubocop is run. Keys are the name of the extension, and values are an array
+  # of gems in the Gemfile that the extension is suggested for, if not already
+  # included.
+  SuggestExtensions:
+    rubocop-rails: [rails]
+    rubocop-rspec: [rspec, rspec-rails]
+    rubocop-minitest: [minitest]
+    rubocop-sequel: [sequel]
+    rubocop-rake: [rake]
+    rubocop-graphql: [graphql]
+    rubocop-capybara: [capybara]
+    rubocop-factory_bot: [factory_bot, factory_bot_rails]
+    rubocop-rspec_rails: [rspec-rails]
+  # Enable/Disable checking the methods extended by Active Support.
+  ActiveSupportExtensionsEnabled: false
+  # Future version of Ruby will freeze string literals by default.
+  # This allows to opt in early, for example when enabled through RUBYOPT.
+  # For now this will behave as if set to false but in future ruby versions
+  # (likely 4.0) it will be true by default.
+  StringLiteralsFrozenByDefault: ~
+
+## Layout ##
+Layout/ClassStructure:
+  Enabled: true
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle:      table
+
+Layout/SpaceInsideArrayPercentLiteral:
+  Enabled: false
+
+## Lint ##
+Lint/InheritException:
+  EnforcedStyle: standard_error
+
+Lint/ItWithoutArgumentsInBlock:
+  Enabled: false
+
+## Naming ##
+Naming/MethodParameterName:
+  AllowedNames:
+    - x
+    - y
+
+## Style ##
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyCaseCondition:
+  Enabled: false
+
+Style/NumberedParametersLimit:
+  Max: 2
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
