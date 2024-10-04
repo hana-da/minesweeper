@@ -43,7 +43,7 @@ class Board
   alias f flag
 
   def finished?
-    cells.all? { it.correct? }
+    cells.all?(&:resolved?)
   end
 
   def show
@@ -109,7 +109,7 @@ class Cell
   def mine? = mine
   def opened? = opened
   def flaged? = flaged
-  def correct? = opened? || (flaged? && mine?)
+  def resolved? = opened? || (flaged? && mine?)
   def openable? = !(opened? || flaged?)
 
   def plant_mine
