@@ -147,6 +147,7 @@ end
 
 if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
   history = []
+  history_count = 20
   prompt = '> '
 
   b = Board.new
@@ -154,9 +155,9 @@ if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
   loop do
     b.show
     puts prompt
-    history.each { puts "  #{it}" }
+    history.first(history_count).each { puts "  #{it}" }
 
-    print "\033[#{history.size + 1}A"
+    print "\033[#{[history.size, history_count].min + 1}A"
     print prompt
     history.unshift(gets.chomp)
 
