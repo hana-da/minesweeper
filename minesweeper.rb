@@ -19,7 +19,7 @@ class Board
   def initialize(width: 9, height: 9, mine_count: 10)
     @cells = make_cells_with_mine(width:, height:, mine_count:)
     @grid = cells.each_slice(width).to_a
-    set_mine_count_to_all_of_cells
+    set_neighbors_mine_count_to_all_of_cells
   end
 
   def open(x:, y:)
@@ -29,7 +29,7 @@ class Board
     cell.open
     if cell.mine?
       raise GameOver
-    elsif cell.count.zero?
+    elsif cell.neighbors_mine_count.zero?
       neighbors_coordinates_of(x:, y:).each { self.open(x: _1, y: _2) }
     end
 
@@ -67,10 +67,10 @@ class Board
     end
   end
 
-  private def set_mine_count_to_all_of_cells
+  private def set_neighbors_mine_count_to_all_of_cells
     height.times do |y|
       width.times do |x|
-        self[x:, y:].count = neighbors_cells_of(x:, y:).count(&:mine?)
+        self[x:, y:].neighbors_mine_count = neighbors_cells_of(x:, y:).count(&:mine?)
       end
     end
   end
@@ -95,7 +95,7 @@ class Board
 end
 
 class Cell
-  attr_accessor :count
+  attr_accessor :neighbors_mine_count
 
   private attr_accessor :mine, :opened, :flaged
 
@@ -103,7 +103,7 @@ class Cell
     @mine = false
     @opened = false
     @flaged = false
-    @count = nil
+    @neighbors_mine_count = nil
   end
 
   def mine? = mine
@@ -136,10 +136,10 @@ class Cell
   def icon
     @icon ||= if mine?
                 "💣\u200B"
-              elsif count.zero?
+              elsif neighbors_mine_count.zero?
                 "　\u200B"
               else
-                (0xff10 + count).chr(Encoding::UTF_8) << "\u200B"
+                (0xff10 + neighbors_mine_count).chr(Encoding::UTF_8) << "\u200B"
               end
   end
 end
