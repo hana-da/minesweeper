@@ -24,7 +24,7 @@ class Board
 
   def open(x:, y:)
     cell = self[x:, y:]
-    return if cell.nil? || cell.opened?
+    return unless cell&.openable?
 
     cell.open
     if cell.mine?
@@ -110,6 +110,7 @@ class Cell
   def opened? = opened
   def flaged? = flaged
   def correct? = opened? || (flaged? && mine?)
+  def openable? = !(opened? || flaged?)
 
   def plant_mine
     tap { self.mine = true }
