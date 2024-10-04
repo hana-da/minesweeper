@@ -163,7 +163,7 @@ if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
 
     break if b.finished?
   rescue NameError, ArgumentError, SyntaxError => e
-    history.unshift(*e.message)
+    history.unshift(*e.message.lines)
   rescue Board::GameOver
     break
   end
