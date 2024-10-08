@@ -48,7 +48,8 @@ class Board
 
   def show
     print ESC_SEQ.values_at(:ED, :CUP).join
-    print 'y\x|', Array.new(width) { format('%2d', it) }.join(' '), "\n"
+    puts ' \\x|'
+    print 'y \|', Array.new(width) { format('%2d', it) }.join(' '), "\n"
     puts "---+#{'---' * width}"
     puts self
     puts "---+#{'---' * width}"
