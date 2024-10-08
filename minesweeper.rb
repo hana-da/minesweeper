@@ -128,19 +128,19 @@ class Cell
     if opened?
       icon
     elsif flaged?
-      "⚠️\u200B"
+      '⚠️ '
     else
-      "⬜️\u200B"
+      '⬜ '
     end
   end
 
   def icon
     @icon ||= if mine?
-                "💣\u200B"
+                '💣 '
               elsif neighbors_mine_count.zero?
-                "　\u200B"
+                '　 '
               else
-                (0xff10 + neighbors_mine_count).chr(Encoding::UTF_8) << "\u200B"
+                (0xff10 + neighbors_mine_count).chr(Encoding::UTF_8) << ' '
               end
   end
 end
