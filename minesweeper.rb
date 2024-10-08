@@ -10,8 +10,8 @@ class Board
   ].freeze
 
   ESC_SEQ = {
-    ED:  "\033[2J",
-    CUP: "\033[1;1H",
+    ED:  "\033[2J",   # Erase in Display
+    CUP: "\033[1;1H", # Cursor Position (top left corner)
   }.freeze
 
   private attr_reader :grid, :cells
@@ -173,7 +173,7 @@ if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
     puts prompt
     history.first(history_count).each { puts "  #{it}" }
 
-    print "\033[#{[history.size, history_count].min + 1}A"
+    print "\033[#{[history.size, history_count].min + 1}A" # Cursor Up
     print prompt
     history.unshift(gets.chomp)
 
