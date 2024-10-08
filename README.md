@@ -7,7 +7,7 @@ Kashiwa.rb でモブプロした時は完成に至らなかったので、その
 
 # Runtime requirement
 
-Ruby 3.4.0-preview1
+Ruby 3.4.0-preview1 or later
 
 # Usage
 
