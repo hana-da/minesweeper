@@ -95,6 +95,20 @@ class Board
 end
 
 class Cell
+  NUMBER_COLOR = [
+    "\033[0m",  # 白(Reset or normal)
+    "\033[94m", # 青(Bright Blue)
+    "\033[32m", # 緑(Green)
+    "\033[91m", # 赤(Bright Red)
+    "\033[34m", # 紺(Blue)
+    "\033[31m", # 茶(Red)
+    "\033[36m", # シアン(Cyan)
+    "\033[0m",  # 黒(Reset or normal)
+    "\033[90m", # 灰(Gray)
+  ].freeze
+  BOLD = "\033[1m"
+  COLOR_RESET = NUMBER_COLOR[0]
+
   attr_accessor :neighbors_mine_count
 
   private attr_accessor :mine, :opened, :flaged
@@ -140,7 +154,9 @@ class Cell
               elsif neighbors_mine_count.zero?
                 '　 '
               else
-                (0xff10 + neighbors_mine_count).chr(Encoding::UTF_8) << ' '
+                (NUMBER_COLOR[neighbors_mine_count] + BOLD +
+                  (0xff10 + neighbors_mine_count).chr(Encoding::UTF_8)) <<
+                  " #{COLOR_RESET}"
               end
   end
 end
