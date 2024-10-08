@@ -10,8 +10,8 @@ class Board
   ].freeze
 
   ESC_SEQ = {
-    clear: "\033[2J",
-    home:  "\033[1;1H",
+    ED:  "\033[2J",
+    CUP: "\033[1;1H",
   }.freeze
 
   private attr_reader :grid, :cells
@@ -47,7 +47,7 @@ class Board
   end
 
   def show
-    print ESC_SEQ.values_at(:clear, :home).join
+    print ESC_SEQ.values_at(:ED, :CUP).join
     print 'y\x|', Array.new(width) { format('%2d', it) }.join(' '), "\n"
     puts "---+#{'---' * width}"
     puts self
