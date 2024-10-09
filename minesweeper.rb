@@ -168,6 +168,7 @@ if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
   prompt = '> '
 
   b = Board.new
+  started_at = Time.now
 
   loop do
     b.show
@@ -187,4 +188,5 @@ if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
     break
   end
   b.show
+  puts "Score: #{Time.now - started_at} Seconds"
 end
