@@ -77,7 +77,7 @@ class Board
   end
 
   private def [](x:, y:)
-    grid.at(y)&.at(x)
+    grid.dig(y, x)
   end
 
   private def neighbors_cells_of(x:, y:)
