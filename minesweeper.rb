@@ -22,15 +22,17 @@ class Board
     set_neighbors_mine_count_to_all_of_cells
   end
 
-  def open(x:, y:)
-    cell = self[x:, y:]
-    return unless cell&.openable?
+  def open(x:, y:, allow_chording: true)
+    cell = self[x:, y:] or return
 
-    cell.open
-    if cell.mine?
-      raise GameOver
-    elsif cell.neighbors_mine_count.zero?
-      neighbors_coordinates_of(x:, y:).each { self.open(x: _1, y: _2) }
+    return if cell.flaged?
+
+    if cell.opened?
+      chord(x:, y:) if allow_chording
+    else
+      raise GameOver if cell.open.mine?
+
+      open_neighbors_without_chording(x:, y:) if cell.neighbors_mine_count.zero?
     end
 
     cell
@@ -74,6 +76,16 @@ class Board
         self[x:, y:].neighbors_mine_count = neighbors_cells_of(x:, y:).count(&:mine?)
       end
     end
+  end
+
+  private def chord(x:, y:)
+    return unless self[x:, y:].neighbors_mine_count == neighbors_cells_of(x:, y:).count(&:flaged?)
+
+    open_neighbors_without_chording(x:, y:)
+  end
+
+  private def open_neighbors_without_chording(x:, y:)
+    neighbors_coordinates_of(x:, y:).each { self.open(x: _1, y: _2, allow_chording: false) }
   end
 
   private def [](x:, y:)
@@ -125,7 +137,6 @@ class Cell
   def opened? = opened
   def flaged? = flaged
   def resolved? = opened? || (flaged? && mine?)
-  def openable? = !(opened? || flaged?)
 
   def plant_mine
     tap { self.mine = true }
