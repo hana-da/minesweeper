@@ -161,15 +161,15 @@ class Cell
   end
 
   def icon
-    @icon ||= if mine?
-                '💣 '
-              elsif neighbors_mine_count.zero?
-                '　 '
-              else
-                (NUMBER_COLOR[neighbors_mine_count] + BOLD +
-                  (0xff10 + neighbors_mine_count).chr(Encoding::UTF_8)) <<
-                  " #{COLOR_RESET}"
-              end
+    if mine?
+      '💣 '
+    elsif neighbors_mine_count.zero?
+      '　 '
+    else
+      (NUMBER_COLOR[neighbors_mine_count] + BOLD +
+       (0xff10 + neighbors_mine_count).chr(Encoding::UTF_8)) <<
+        " #{COLOR_RESET}"
+    end
   end
 end
 
