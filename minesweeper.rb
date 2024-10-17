@@ -23,24 +23,23 @@ class Board
   end
 
   def open(x:, y:, allow_chording: true)
-    cell = self[x:, y:] or return
+    tap do
+      cell = self[x:, y:]
+      next if cell.nil? || cell.flaged?
 
-    return if cell.flaged?
+      if cell.opened?
+        chord(x:, y:) if allow_chording
+      else
+        raise GameOver if cell.open.mine?
 
-    if cell.opened?
-      chord(x:, y:) if allow_chording
-    else
-      raise GameOver if cell.open.mine?
-
-      open_neighbors_without_chording(x:, y:) if cell.neighbors_mine_count.zero?
+        open_neighbors_without_chording(x:, y:) if cell.neighbors_mine_count.zero?
+      end
     end
-
-    cell
   end
   alias o open
 
   def flag(x:, y:)
-    self[x:, y:]&.toggle_flag
+    tap { self[x:, y:]&.toggle_flag }
   end
   alias f flag
 
