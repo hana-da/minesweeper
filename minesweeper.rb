@@ -49,11 +49,19 @@ class Board
 
   def show
     print ESC_SEQ.values_at(:ED, :CUP).join
-    puts ' \\x|'
-    print 'y \|', Array.new(width) { format('%2d', it) }.join(' '), "\n"
-    puts "---+#{'---' * width}"
-    puts self
-    puts "---+#{'---' * width}"
+
+    col_numbers = Array.new(width) { format('%2d', it) }.join(' ')
+    horizontal_rule = "---+#{'---' * width}"
+
+    puts board = <<~BOARD
+       \\x|
+      y \\|#{col_numbers}
+      #{horizontal_rule}
+      #{self}
+      #{horizontal_rule}
+    BOARD
+
+    board.count("\n")
   end
 
   def to_s
