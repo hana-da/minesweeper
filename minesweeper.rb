@@ -183,15 +183,18 @@ class Cell
 end
 
 if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
+  require 'io/console'
+
   history = []
-  history_count = 20
   prompt = "> #{Board::ESC_SEQ[:SCP]}"
 
   b = Board.new
   started_at = Time.now
 
   loop do
-    b.show
+    board_height = b.show
+    history_count = IO.console.winsize.first - board_height - 2
+
     puts prompt
     history.first(history_count).each { puts "  #{it}" }
 
