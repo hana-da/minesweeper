@@ -12,6 +12,8 @@ class Board
   ESC_SEQ = {
     ED:  "\033[2J",   # Erase in Display
     CUP: "\033[1;1H", # Cursor Position (top left corner)
+    SCP: "\033[s",    # Save Current Cursor Position
+    RCP: "\033[u",    # Restore Saved Cursor Position
   }.freeze
 
   private attr_reader :grid, :cells
@@ -183,7 +185,7 @@ end
 if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
   history = []
   history_count = 20
-  prompt = '> '
+  prompt = "> #{Board::ESC_SEQ[:SCP]}"
 
   b = Board.new
   started_at = Time.now
@@ -193,8 +195,7 @@ if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
     puts prompt
     history.first(history_count).each { puts "  #{it}" }
 
-    print "\033[#{[history.size, history_count].min + 1}A" # Cursor Up
-    print prompt
+    print Board::ESC_SEQ[:RCP]
     history.unshift(gets.chomp)
 
     b.instance_eval(history.first) # 雑でごめん
