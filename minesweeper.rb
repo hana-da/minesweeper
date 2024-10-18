@@ -153,7 +153,7 @@ class Cell
     if opened?
       icon
     elsif flaged?
-      '⚠️ '
+      '🚩 '
     else
       '⬜ '
     end
