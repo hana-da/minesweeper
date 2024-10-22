@@ -145,7 +145,7 @@ class Cell
   def mine? = mine
   def opened? = opened
   def flaged? = flaged
-  def resolved? = opened? || (flaged? && mine?)
+  def resolved? = opened? || mine?
 
   def plant_mine
     tap { self.mine = true }
