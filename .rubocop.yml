@@ -140,7 +140,24 @@ Lint/InheritException:
 Lint/ItWithoutArgumentsInBlock:
   Enabled: false
 
+## Metrics
+Metrics/AbcSize:
+  AllowedPatterns:
+    - '\Atest_'
+
+Metrics/MethodLength:
+  AllowedPatterns:
+    - '\Atest_'
+
 ## Naming ##
+Naming/AsciiIdentifiers:
+  Exclude:
+    - 'test/*_test.rb'
+
+Naming/MethodName:
+  Exclude:
+    - 'test/*_test.rb'
+
 Naming/MethodParameterName:
   AllowedNames:
     - x

@@ -20,3 +20,7 @@ Ruby 3.4.0-preview1 or later
 - flag x:3, y: 2
     - alias `f`
 - abort
+
+# Test
+
+> $ rake
