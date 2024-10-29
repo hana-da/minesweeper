@@ -18,9 +18,11 @@ class Board
 
   private attr_reader :grid, :cells
 
-  def initialize(width: 9, height: 9, mine_count: 10)
-    @cells = make_cells_with_mine(width:, height:, mine_count:)
+  def initialize(width: 9, height: 9, mine_count: 10, planter: MinePlanter::Random.new(mine_count))
+    @cells = Array.new(width * height) { Cell.new }
     @grid = cells.each_slice(width).to_a
+
+    planter.plant_to(cells)
     set_neighbors_mine_count_to_all_of_cells
   end
 
@@ -73,12 +75,6 @@ class Board
   private def width = grid.first.size
   private def height = grid.size
 
-  private def make_cells_with_mine(width:, height:, mine_count:)
-    Array.new(width * height) { Cell.new }.tap do |cells|
-      cells.sample(mine_count).each(&:plant_mine)
-    end
-  end
-
   private def set_neighbors_mine_count_to_all_of_cells
     height.times do |y|
       width.times do |x|
@@ -112,6 +108,21 @@ class Board
       next if [nx, ny].min.negative?
 
       [nx, ny]
+    end
+  end
+end
+
+class MinePlanter
+  class Random < MinePlanter
+    attr_reader :mine_count
+
+    def initialize(mine_count)
+      super()
+      @mine_count = mine_count
+    end
+
+    def plant_to(cells)
+      cells.sample(mine_count).each(&:plant_mine)
     end
   end
 end
