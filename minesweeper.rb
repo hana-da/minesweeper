@@ -18,9 +18,9 @@ class Board
 
   private attr_reader :grid, :cells
 
-  def initialize(width: 9, height: 9, mine_count: 10)
-    @cells = make_cells_with_mine(width:, height:, mine_count:)
-    @grid = cells.each_slice(width).to_a
+  def initialize(grid = Cell.grid_with_mine)
+    @grid = grid
+    @cells = grid.flatten
     set_neighbors_mine_count_to_all_of_cells
   end
 
@@ -72,12 +72,6 @@ class Board
 
   private def width = grid.first.size
   private def height = grid.size
-
-  private def make_cells_with_mine(width:, height:, mine_count:)
-    Array.new(width * height) { Cell.new }.tap do |cells|
-      cells.sample(mine_count).each(&:plant_mine)
-    end
-  end
 
   private def set_neighbors_mine_count_to_all_of_cells
     height.times do |y|
@@ -134,6 +128,12 @@ class Cell
   attr_accessor :neighbors_mine_count
 
   private attr_accessor :mine, :opened, :flaged
+
+  def self.grid_with_mine(width: 9, height: 9, mine_count: 10)
+    Array.new(width * height) { Cell.new }.tap do |cells|
+      cells.sample(mine_count).each(&:plant_mine)
+    end.each_slice(width).to_a
+  end
 
   def initialize
     @mine = false
