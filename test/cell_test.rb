@@ -112,4 +112,12 @@ class CellTest < Minitest::Test
     cell.neighbors_mine_count = 8
     assert_equal "#{Cell::NUMBER_COLOR[8]}#{Cell::BOLD}８ #{Cell::COLOR_RESET}", cell.to_s
   end
+
+  def test_9x9でmineが10個のCell配列を生成する
+    cells = Cell.grid_with_mine.flatten
+
+    assert(cells.all? { it.instance_of?(Cell) })
+    assert_equal 9 * 9, cells.size
+    assert_equal 10, cells.count(&:mine?)
+  end
 end
