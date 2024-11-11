@@ -88,6 +88,63 @@ class BoardTest < Minitest::Test
     assert_equal 0, cell(x: 17, y: 1).neighbors_mine_count
   end
 
+  def test_openメソッドで何もないCellを開く
+    b = Board.new(grid_with_map('-'))
+
+    b.open(x: 0, y: 0)
+    assert cell(x: 0, y: 0).opened?
+  end
+
+  def test_openメソッドでmineが埋まっているCellを開く
+    b = Board.new(grid_with_map('x'))
+
+    assert_raises(Board::GameOver) { b.open(x: 0, y: 0) }
+  end
+
+  def test_openメソッドでCellがない所を開いても何も起きない
+    b = Board.new(grid_with_map('-'))
+
+    b.open(x: 1, y: 1)
+    refute cell(x: 0, y: 0).opened?
+  end
+
+  def test_openメソッドで旗が立っている所は開けない
+    b = Board.new(grid_with_map('-'))
+
+    b.flag(x: 0, y: 0)
+    refute cell(x: 0, y: 0).opened?
+  end
+
+  def test_openメソッドでCellを開いたところが0だったら回りを連鎖的に開く
+    b = Board.new(grid_with_map(<<~MAP))
+      ??1-
+      ?x1-
+      111-
+      ----
+    MAP
+
+    b.open(x: 3, y: 2)
+    refute cell(x: 0, y: 0).opened?
+    refute cell(x: 1, y: 0).opened?
+    assert cell(x: 2, y: 0).opened?
+    assert cell(x: 3, y: 0).opened?
+
+    refute cell(x: 0, y: 1).opened?
+    refute cell(x: 1, y: 1).opened?
+    assert cell(x: 2, y: 1).opened?
+    assert cell(x: 3, y: 1).opened?
+
+    assert cell(x: 0, y: 2).opened?
+    assert cell(x: 1, y: 2).opened?
+    assert cell(x: 2, y: 2).opened?
+    assert cell(x: 3, y: 2).opened?
+
+    assert cell(x: 0, y: 3).opened?
+    assert cell(x: 1, y: 3).opened?
+    assert cell(x: 2, y: 3).opened?
+    assert cell(x: 3, y: 3).opened?
+  end
+
   def test_flagメソッドで旗を立てたり取ったりする
     b = Board.new(grid_with_map('-'))
 
