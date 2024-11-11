@@ -65,6 +65,29 @@ class BoardTest < Minitest::Test
     assert b.finished?
   end
 
+  def test_BoardにCellを渡すと近隣のmine数がセットされる
+    grid_with_map(<<~MAP)
+      xxxx--x------------
+      x8x7x6x5-4x3-2-1-0-
+      xxxxxxxxxxxx-xx----
+    MAP
+
+    assert(@grid.flatten.all? { it.neighbors_mine_count.nil? })
+
+    Board.new(@grid)
+    assert(@grid.flatten.none? { it.neighbors_mine_count.nil? })
+
+    assert_equal 8, cell(x:  1, y: 1).neighbors_mine_count
+    assert_equal 7, cell(x:  3, y: 1).neighbors_mine_count
+    assert_equal 6, cell(x:  5, y: 1).neighbors_mine_count
+    assert_equal 5, cell(x:  7, y: 1).neighbors_mine_count
+    assert_equal 4, cell(x:  9, y: 1).neighbors_mine_count
+    assert_equal 3, cell(x: 11, y: 1).neighbors_mine_count
+    assert_equal 2, cell(x: 13, y: 1).neighbors_mine_count
+    assert_equal 1, cell(x: 15, y: 1).neighbors_mine_count
+    assert_equal 0, cell(x: 17, y: 1).neighbors_mine_count
+  end
+
   def test_flagメソッドで旗を立てたり取ったりする
     b = Board.new(grid_with_map('-'))
 
