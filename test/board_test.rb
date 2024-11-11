@@ -20,7 +20,11 @@ class BoardTest < Minitest::Test
     cells = Array.new(map.size) { Cell.new }
     map.each_char.with_index { |c, i| c == 'x' && cells[i].plant_mine }
 
-    cells.each_slice(width).to_a
+    @grid = cells.each_slice(width).to_a
+  end
+
+  def cell(x:, y:)
+    @grid.dig(y, x)
   end
 
   def test_デフォルトのBoard
@@ -60,5 +64,28 @@ class BoardTest < Minitest::Test
     end
 
     assert b.finished?
+  end
+
+  def test_flagメソッドで旗を立てたり取ったりする
+    b = Board.new(grid_with_map('-'))
+
+    refute cell(x: 0, y: 0).opened?
+    refute cell(x: 0, y: 0).flaged?
+
+    b.flag(x: 0, y: 0)
+    refute cell(x: 0, y: 0).opened?
+    assert cell(x: 0, y: 0).flaged?
+
+    b.flag(x: 0, y: 0)
+    refute cell(x: 0, y: 0).opened?
+    refute cell(x: 0, y: 0).flaged?
+  end
+
+  def test_flagメソッドで枠外を指定
+    b = Board.new(grid_with_map('-'))
+
+    b.flag(x: 10, y: 10)
+    refute cell(x: 10, y: 10)
+    refute cell(x: 0, y: 0).flaged?
   end
 end
