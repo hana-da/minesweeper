@@ -145,6 +145,107 @@ class BoardTest < Minitest::Test
     assert cell(x: 3, y: 3).opened?
   end
 
+  def test_openメソッドでchordingして開いたら成功した
+    b = Board.new(grid_with_map(<<~MAP))
+      ----
+      -x--
+      --1-
+      ----
+    MAP
+
+    b.flag(x: 1, y: 1)
+    b.open(x: 2, y: 2)
+
+    refute cell(x: 1, y: 1).opened?
+    refute cell(x: 2, y: 1).opened?
+    refute cell(x: 3, y: 1).opened?
+
+    refute cell(x: 1, y: 2).opened?
+    assert cell(x: 2, y: 2).opened?
+    refute cell(x: 3, y: 2).opened?
+
+    refute cell(x: 1, y: 3).opened?
+    refute cell(x: 2, y: 3).opened?
+    refute cell(x: 3, y: 3).opened?
+
+    b.open(x: 2, y: 2)
+
+    refute cell(x: 1, y: 1).opened?
+    assert cell(x: 2, y: 1).opened?
+    assert cell(x: 3, y: 1).opened?
+
+    assert cell(x: 1, y: 2).opened?
+    assert cell(x: 2, y: 2).opened?
+    assert cell(x: 3, y: 2).opened?
+
+    assert cell(x: 1, y: 3).opened?
+    assert cell(x: 2, y: 3).opened?
+    assert cell(x: 3, y: 3).opened?
+  end
+
+  def test_openメソッドでchordingする時、旗が立ってないと発動しない
+    b = Board.new(grid_with_map(<<~MAP))
+      ----
+      -x--
+      --1-
+      ----
+    MAP
+
+    b.open(x: 2, y: 2)
+
+    refute cell(x: 1, y: 1).opened?
+    refute cell(x: 2, y: 1).opened?
+    refute cell(x: 3, y: 1).opened?
+
+    refute cell(x: 1, y: 2).opened?
+    assert cell(x: 2, y: 2).opened?
+    refute cell(x: 3, y: 2).opened?
+
+    refute cell(x: 1, y: 3).opened?
+    refute cell(x: 2, y: 3).opened?
+    refute cell(x: 3, y: 3).opened?
+
+    b.open(x: 2, y: 2)
+
+    refute cell(x: 1, y: 1).opened?
+    refute cell(x: 2, y: 1).opened?
+    refute cell(x: 3, y: 1).opened?
+
+    refute cell(x: 1, y: 2).opened?
+    assert cell(x: 2, y: 2).opened?
+    refute cell(x: 3, y: 2).opened?
+
+    refute cell(x: 1, y: 3).opened?
+    refute cell(x: 2, y: 3).opened?
+    refute cell(x: 3, y: 3).opened?
+  end
+
+  def test_openメソッドでchordingする時、旗を立て間違えていると失敗
+    b = Board.new(grid_with_map(<<~MAP))
+      ----
+      -xF-
+      --1-
+      ----
+    MAP
+
+    b.open(x: 2, y: 2)
+    b.flag(x: 2, y: 1)
+
+    refute cell(x: 1, y: 1).opened?
+    refute cell(x: 2, y: 1).opened?
+    refute cell(x: 3, y: 1).opened?
+
+    refute cell(x: 1, y: 2).opened?
+    assert cell(x: 2, y: 2).opened?
+    refute cell(x: 3, y: 2).opened?
+
+    refute cell(x: 1, y: 3).opened?
+    refute cell(x: 2, y: 3).opened?
+    refute cell(x: 3, y: 3).opened?
+
+    assert_raises(Board::GameOver) { b.open(x: 2, y: 2) }
+  end
+
   def test_flagメソッドで旗を立てたり取ったりする
     b = Board.new(grid_with_map('-'))
 
