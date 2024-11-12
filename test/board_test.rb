@@ -18,6 +18,14 @@ class BoardTest < Minitest::Test
     @grid.dig(y, x)
   end
 
+  def assert_cell_opened(x:, y:)
+    assert cell(x:, y:).opened?
+  end
+
+  def assert_cell_closed(x:, y:)
+    refute cell(x:, y:).opened?
+  end
+
   def test_デフォルトのBoard
     b = Board.new
 
@@ -89,7 +97,7 @@ class BoardTest < Minitest::Test
     b = Board.new(grid_with_map('-'))
 
     b.open(x: 0, y: 0)
-    assert cell(x: 0, y: 0).opened?
+    assert_cell_opened(x: 0, y: 0)
   end
 
   def test_openメソッドでmineが埋まっているCellを開く
@@ -102,14 +110,14 @@ class BoardTest < Minitest::Test
     b = Board.new(grid_with_map('-'))
 
     b.open(x: 1, y: 1)
-    refute cell(x: 0, y: 0).opened?
+    assert_cell_closed(x: 0, y: 0)
   end
 
   def test_openメソッドで旗が立っている所は開けない
     b = Board.new(grid_with_map('-'))
 
     b.flag(x: 0, y: 0)
-    refute cell(x: 0, y: 0).opened?
+    assert_cell_closed(x: 0, y: 0)
   end
 
   def test_openメソッドでCellを開いたところが0だったら回りを連鎖的に開く
@@ -121,25 +129,25 @@ class BoardTest < Minitest::Test
     MAP
 
     b.open(x: 3, y: 2)
-    refute cell(x: 0, y: 0).opened?
-    refute cell(x: 1, y: 0).opened?
-    assert cell(x: 2, y: 0).opened?
-    assert cell(x: 3, y: 0).opened?
+    assert_cell_closed(x: 0, y: 0)
+    assert_cell_closed(x: 1, y: 0)
+    assert_cell_opened(x: 2, y: 0)
+    assert_cell_opened(x: 3, y: 0)
 
-    refute cell(x: 0, y: 1).opened?
-    refute cell(x: 1, y: 1).opened?
-    assert cell(x: 2, y: 1).opened?
-    assert cell(x: 3, y: 1).opened?
+    assert_cell_closed(x: 0, y: 1)
+    assert_cell_closed(x: 1, y: 1)
+    assert_cell_opened(x: 2, y: 1)
+    assert_cell_opened(x: 3, y: 1)
 
-    assert cell(x: 0, y: 2).opened?
-    assert cell(x: 1, y: 2).opened?
-    assert cell(x: 2, y: 2).opened?
-    assert cell(x: 3, y: 2).opened?
+    assert_cell_opened(x: 0, y: 2)
+    assert_cell_opened(x: 1, y: 2)
+    assert_cell_opened(x: 2, y: 2)
+    assert_cell_opened(x: 3, y: 2)
 
-    assert cell(x: 0, y: 3).opened?
-    assert cell(x: 1, y: 3).opened?
-    assert cell(x: 2, y: 3).opened?
-    assert cell(x: 3, y: 3).opened?
+    assert_cell_opened(x: 0, y: 3)
+    assert_cell_opened(x: 1, y: 3)
+    assert_cell_opened(x: 2, y: 3)
+    assert_cell_opened(x: 3, y: 3)
   end
 
   def test_openメソッドでchordingして開いたら成功した
@@ -153,31 +161,31 @@ class BoardTest < Minitest::Test
     b.flag(x: 1, y: 1)
     b.open(x: 2, y: 2)
 
-    refute cell(x: 1, y: 1).opened?
-    refute cell(x: 2, y: 1).opened?
-    refute cell(x: 3, y: 1).opened?
+    assert_cell_closed(x: 1, y: 1)
+    assert_cell_closed(x: 2, y: 1)
+    assert_cell_closed(x: 3, y: 1)
 
-    refute cell(x: 1, y: 2).opened?
-    assert cell(x: 2, y: 2).opened?
-    refute cell(x: 3, y: 2).opened?
+    assert_cell_closed(x: 1, y: 2)
+    assert_cell_opened(x: 2, y: 2)
+    assert_cell_closed(x: 3, y: 2)
 
-    refute cell(x: 1, y: 3).opened?
-    refute cell(x: 2, y: 3).opened?
-    refute cell(x: 3, y: 3).opened?
+    assert_cell_closed(x: 1, y: 3)
+    assert_cell_closed(x: 2, y: 3)
+    assert_cell_closed(x: 3, y: 3)
 
     b.open(x: 2, y: 2)
 
-    refute cell(x: 1, y: 1).opened?
-    assert cell(x: 2, y: 1).opened?
-    assert cell(x: 3, y: 1).opened?
+    assert_cell_closed(x: 1, y: 1)
+    assert_cell_opened(x: 2, y: 1)
+    assert_cell_opened(x: 3, y: 1)
 
-    assert cell(x: 1, y: 2).opened?
-    assert cell(x: 2, y: 2).opened?
-    assert cell(x: 3, y: 2).opened?
+    assert_cell_opened(x: 1, y: 2)
+    assert_cell_opened(x: 2, y: 2)
+    assert_cell_opened(x: 3, y: 2)
 
-    assert cell(x: 1, y: 3).opened?
-    assert cell(x: 2, y: 3).opened?
-    assert cell(x: 3, y: 3).opened?
+    assert_cell_opened(x: 1, y: 3)
+    assert_cell_opened(x: 2, y: 3)
+    assert_cell_opened(x: 3, y: 3)
   end
 
   def test_openメソッドでchordingする時、旗が立ってないと発動しない
@@ -190,31 +198,31 @@ class BoardTest < Minitest::Test
 
     b.open(x: 2, y: 2)
 
-    refute cell(x: 1, y: 1).opened?
-    refute cell(x: 2, y: 1).opened?
-    refute cell(x: 3, y: 1).opened?
+    assert_cell_closed(x: 1, y: 1)
+    assert_cell_closed(x: 2, y: 1)
+    assert_cell_closed(x: 3, y: 1)
 
-    refute cell(x: 1, y: 2).opened?
-    assert cell(x: 2, y: 2).opened?
-    refute cell(x: 3, y: 2).opened?
+    assert_cell_closed(x: 1, y: 2)
+    assert_cell_opened(x: 2, y: 2)
+    assert_cell_closed(x: 3, y: 2)
 
-    refute cell(x: 1, y: 3).opened?
-    refute cell(x: 2, y: 3).opened?
-    refute cell(x: 3, y: 3).opened?
+    assert_cell_closed(x: 1, y: 3)
+    assert_cell_closed(x: 2, y: 3)
+    assert_cell_closed(x: 3, y: 3)
 
     b.open(x: 2, y: 2)
 
-    refute cell(x: 1, y: 1).opened?
-    refute cell(x: 2, y: 1).opened?
-    refute cell(x: 3, y: 1).opened?
+    assert_cell_closed(x: 1, y: 1)
+    assert_cell_closed(x: 2, y: 1)
+    assert_cell_closed(x: 3, y: 1)
 
-    refute cell(x: 1, y: 2).opened?
-    assert cell(x: 2, y: 2).opened?
-    refute cell(x: 3, y: 2).opened?
+    assert_cell_closed(x: 1, y: 2)
+    assert_cell_opened(x: 2, y: 2)
+    assert_cell_closed(x: 3, y: 2)
 
-    refute cell(x: 1, y: 3).opened?
-    refute cell(x: 2, y: 3).opened?
-    refute cell(x: 3, y: 3).opened?
+    assert_cell_closed(x: 1, y: 3)
+    assert_cell_closed(x: 2, y: 3)
+    assert_cell_closed(x: 3, y: 3)
   end
 
   def test_openメソッドでchordingする時、旗を立て間違えていると失敗
@@ -228,17 +236,17 @@ class BoardTest < Minitest::Test
     b.open(x: 2, y: 2)
     b.flag(x: 2, y: 1)
 
-    refute cell(x: 1, y: 1).opened?
-    refute cell(x: 2, y: 1).opened?
-    refute cell(x: 3, y: 1).opened?
+    assert_cell_closed(x: 1, y: 1)
+    assert_cell_closed(x: 2, y: 1)
+    assert_cell_closed(x: 3, y: 1)
 
-    refute cell(x: 1, y: 2).opened?
-    assert cell(x: 2, y: 2).opened?
-    refute cell(x: 3, y: 2).opened?
+    assert_cell_closed(x: 1, y: 2)
+    assert_cell_opened(x: 2, y: 2)
+    assert_cell_closed(x: 3, y: 2)
 
-    refute cell(x: 1, y: 3).opened?
-    refute cell(x: 2, y: 3).opened?
-    refute cell(x: 3, y: 3).opened?
+    assert_cell_closed(x: 1, y: 3)
+    assert_cell_closed(x: 2, y: 3)
+    assert_cell_closed(x: 3, y: 3)
 
     assert_raises(Board::GameOver) { b.open(x: 2, y: 2) }
   end
@@ -246,15 +254,15 @@ class BoardTest < Minitest::Test
   def test_flagメソッドで旗を立てたり取ったりする
     b = Board.new(grid_with_map('-'))
 
-    refute cell(x: 0, y: 0).opened?
+    assert_cell_closed(x: 0, y: 0)
     refute cell(x: 0, y: 0).flaged?
 
     b.flag(x: 0, y: 0)
-    refute cell(x: 0, y: 0).opened?
+    assert_cell_closed(x: 0, y: 0)
     assert cell(x: 0, y: 0).flaged?
 
     b.flag(x: 0, y: 0)
-    refute cell(x: 0, y: 0).opened?
+    assert_cell_closed(x: 0, y: 0)
     refute cell(x: 0, y: 0).flaged?
   end
 
