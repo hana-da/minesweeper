@@ -301,4 +301,24 @@ class BoardTest < Minitest::Test
 
     assert b.finished?
   end
+
+  class DummyCell < Cell
+    def to_s
+      'C'
+    end
+  end
+
+  def test_show
+    b = Board.new(Array.new(12) { DummyCell.new }.each_slice(4).to_a)
+    stdout, = capture_io { b.show }
+    assert_equal <<~TEXT, stdout
+      \e[2J\e[1;1H \\x|
+      y \\| 0  1  2  3
+      ---+------------
+        0|CCCC
+        1|CCCC
+        2|CCCC
+      ---+------------
+    TEXT
+  end
 end
