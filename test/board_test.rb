@@ -280,4 +280,25 @@ class BoardTest < Minitest::Test
     refute cell(x: 10, y: 10)
     refute cell(x: 0, y: 0).flaged?
   end
+
+  def test_mineでないすべてのCellがopenされていればゲーム終了
+    b = Board.new(grid_with_map('-x-'))
+
+    refute b.finished?
+    b.open(x: 0, y: 0)
+    b.flag(x: 1, y: 0)
+    b.open(x: 2, y: 0)
+
+    assert b.finished?
+  end
+
+  def test_ゲーム終了の条件に旗は関係ない
+    b = Board.new(grid_with_map('-x-'))
+
+    refute b.finished?
+    b.open(x: 0, y: 0)
+    b.open(x: 2, y: 0)
+
+    assert b.finished?
+  end
 end
