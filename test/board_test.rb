@@ -26,6 +26,10 @@ class BoardTest < Minitest::Test
     refute cell(x:, y:).opened?
   end
 
+  def assert_cell_neighbors_mine_count(expect, x:, y:)
+    assert expect, cell(x:, y:).neighbors_mine_count
+  end
+
   def test_デフォルトのBoard
     b = Board.new
 
@@ -85,15 +89,15 @@ class BoardTest < Minitest::Test
     Board.new(@grid)
     assert(@grid.flatten.none? { it.neighbors_mine_count.nil? })
 
-    assert_equal 8, cell(x:  1, y: 1).neighbors_mine_count
-    assert_equal 7, cell(x:  3, y: 1).neighbors_mine_count
-    assert_equal 6, cell(x:  5, y: 1).neighbors_mine_count
-    assert_equal 5, cell(x:  7, y: 1).neighbors_mine_count
-    assert_equal 4, cell(x:  9, y: 1).neighbors_mine_count
-    assert_equal 3, cell(x: 11, y: 1).neighbors_mine_count
-    assert_equal 2, cell(x: 13, y: 1).neighbors_mine_count
-    assert_equal 1, cell(x: 15, y: 1).neighbors_mine_count
-    assert_equal 0, cell(x: 17, y: 1).neighbors_mine_count
+    assert_cell_neighbors_mine_count 8, x:  1, y: 1
+    assert_cell_neighbors_mine_count 7, x:  3, y: 1
+    assert_cell_neighbors_mine_count 6, x:  5, y: 1
+    assert_cell_neighbors_mine_count 5, x:  7, y: 1
+    assert_cell_neighbors_mine_count 4, x:  9, y: 1
+    assert_cell_neighbors_mine_count 3, x: 11, y: 1
+    assert_cell_neighbors_mine_count 2, x: 13, y: 1
+    assert_cell_neighbors_mine_count 1, x: 15, y: 1
+    assert_cell_neighbors_mine_count 0, x: 17, y: 1
   end
 
   def test_openメソッドで何もないCellを開く
