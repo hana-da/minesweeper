@@ -321,4 +321,13 @@ class BoardTest < Minitest::Test
       ---+------------
     TEXT
   end
+
+  def test_to_s
+    b = Board.new(Array.new(12) { DummyCell.new }.each_slice(4).to_a)
+    assert_equal <<-TEXT.chomp, b.to_s
+  0|CCCC
+  1|CCCC
+  2|CCCC
+    TEXT
+  end
 end
