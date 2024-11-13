@@ -15,6 +15,8 @@ class BoardTest < Minitest::Test
 
   def replace_cells_with_map(board, map) # rubocop:disable Metrics/AbcSize
     width = map.lines.first.chomp.length
+    map = map.delete("\n")
+
     cells = Array.new(map.delete("\n").size) { Cell.new }
     map.each_char.with_index { |c, i| c == 'x' && cells[i].plant_mine }
 
