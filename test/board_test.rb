@@ -4,15 +4,6 @@ require 'minitest/autorun'
 require_relative '../minesweeper'
 
 class BoardTest < Minitest::Test
-  def setup
-    $stdout = File.open('/dev/null', 'w')
-  end
-
-  def teardown
-    $stdout.close
-    $stdout = STDOUT
-  end
-
   def replace_cells_with_map(board, map) # rubocop:disable Metrics/AbcSize
     width = map.lines.first.chomp.length
     map = map.delete("\n")
@@ -31,8 +22,11 @@ class BoardTest < Minitest::Test
 
   def test_デフォルトのBoard
     b = Board.new
-    assert_equal 9 + 4, b.show
-    refute b.finished?
+
+    capture_io do
+      assert_equal 9 + 4, b.show
+      refute b.finished?
+    end
 
     assert_raises(Board::GameOver) do
       9.times do |x|
@@ -52,8 +46,10 @@ class BoardTest < Minitest::Test
       --------
     MAP
 
-    assert_equal 4 + 4, b.show
-    refute b.finished?
+    capture_io do
+      assert_equal 4 + 4, b.show
+      refute b.finished?
+    end
 
     b.flag(x: 2, y: 1)
     b.flag(x: 5, y: 2)
