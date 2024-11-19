@@ -181,6 +181,7 @@ class Cell
   end
 end
 
+# :nocov:
 if __FILE__ == $0 # rubocop:disable Style/SpecialGlobalVars
   require 'io/console'
 
