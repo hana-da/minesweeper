@@ -52,22 +52,21 @@ class Board
   def show
     print ESC_SEQ.values_at(:ED, :CUP).join
 
-    col_numbers = Array.new(width) { format('%2d', it) }.join(' ')
-    horizontal_rule = "---+#{'---' * width}"
-
-    puts board = <<~BOARD
-       \\x|
-      y \\|#{col_numbers}
-      #{horizontal_rule}
-      #{self}
-      #{horizontal_rule}
-    BOARD
-
-    board.count("\n")
+    to_s.tap { puts it }.count("\n")
   end
 
   def to_s
-    grid.map.with_index { |row, y| format('%<y>3d|%<row>s', y:, row: row.join) }.join("\n")
+    col_numbers = Array.new(width) { format('%2d', it) }.join(' ')
+    horizontal_rule = "---+#{'---' * width}"
+    cell_grid = grid.map.with_index { |row, y| format('%<y>3d|%<row>s', y:, row: row.join) }.join("\n")
+
+    <<~BOARD
+       \\x|
+      y \\|#{col_numbers}
+      #{horizontal_rule}
+      #{cell_grid}
+      #{horizontal_rule}
+    BOARD
   end
 
   private def width = grid.first.size
