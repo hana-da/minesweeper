@@ -145,6 +145,10 @@ Metrics/AbcSize:
   AllowedPatterns:
     - '\Atest_'
 
+Metrics/ClassLength:
+  Exclude:
+    - 'test/*_test.rb'
+
 Metrics/MethodLength:
   AllowedPatterns:
     - '\Atest_'
