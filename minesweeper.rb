@@ -27,7 +27,7 @@ class Board
   def open(x:, y:, allow_chording: true)
     tap do
       cell = self[x:, y:]
-      next if cell.nil? || cell.flaged?
+      next if cell.nil? || cell.flagged?
 
       if cell.opened?
         chord(x:, y:) if allow_chording
@@ -81,7 +81,7 @@ class Board
   end
 
   private def chord(x:, y:)
-    return unless self[x:, y:].neighbors_mine_count == neighbors_cells_of(x:, y:).count(&:flaged?)
+    return unless self[x:, y:].neighbors_mine_count == neighbors_cells_of(x:, y:).count(&:flagged?)
 
     open_neighbors_without_chording(x:, y:)
   end
@@ -126,7 +126,7 @@ class Cell
 
   attr_accessor :neighbors_mine_count
 
-  private attr_accessor :mine, :opened, :flaged
+  private attr_accessor :mine, :opened, :flagged
 
   def self.grid_with_mine(width: 9, height: 9, mine_count: 10)
     Array.new(width * height) { Cell.new }.tap do |cells|
@@ -137,13 +137,13 @@ class Cell
   def initialize
     @mine = false
     @opened = false
-    @flaged = false
+    @flagged = false
     @neighbors_mine_count = nil
   end
 
   def mine? = mine
   def opened? = opened
-  def flaged? = flaged
+  def flagged? = flagged
   def resolved? = opened? || mine?
 
   def plant_mine
@@ -155,13 +155,13 @@ class Cell
   end
 
   def toggle_flag
-    tap { self.flaged = !flaged }
+    tap { self.flagged = !flagged }
   end
 
   def to_s
     if opened?
       icon
-    elsif flaged?
+    elsif flagged?
       '🚩 '
     else
       '⬜ '

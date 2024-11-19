@@ -9,7 +9,7 @@ class CellTest < Minitest::Test
 
     refute cell.mine?
     refute cell.opened?
-    refute cell.flaged?
+    refute cell.flagged?
     refute cell.resolved?
     assert_nil cell.neighbors_mine_count
 
@@ -22,7 +22,7 @@ class CellTest < Minitest::Test
 
     assert cell.mine?
     refute cell.opened?
-    refute cell.flaged?
+    refute cell.flagged?
     assert cell.resolved?
     assert_nil cell.neighbors_mine_count
 
@@ -35,7 +35,7 @@ class CellTest < Minitest::Test
 
     refute cell.mine?
     assert cell.opened?
-    refute cell.flaged?
+    refute cell.flagged?
     assert cell.resolved?
     assert_nil cell.neighbors_mine_count
 
@@ -49,7 +49,7 @@ class CellTest < Minitest::Test
 
     assert cell.mine?
     assert cell.opened?
-    refute cell.flaged?
+    refute cell.flagged?
     assert cell.resolved?
     assert_nil cell.neighbors_mine_count
 
@@ -62,7 +62,7 @@ class CellTest < Minitest::Test
 
     refute cell.mine?
     refute cell.opened?
-    assert cell.flaged?
+    assert cell.flagged?
     refute cell.resolved?
     assert_nil cell.neighbors_mine_count
 
@@ -75,7 +75,7 @@ class CellTest < Minitest::Test
 
     refute cell.mine?
     refute cell.opened?
-    refute cell.flaged?
+    refute cell.flagged?
     refute cell.resolved?
     assert_nil cell.neighbors_mine_count
 

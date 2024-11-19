@@ -63,8 +63,8 @@ class BoardTest < Minitest::Test
     b.flag(x: 2, y: 1)
     b.flag(x: 5, y: 2)
 
-    assert cell(x: 2, y: 1).flaged?
-    assert cell(x: 5, y: 2).flaged?
+    assert cell(x: 2, y: 1).flagged?
+    assert cell(x: 5, y: 2).flagged?
 
     8.times do |x|
       4.times do |y|
@@ -262,15 +262,15 @@ class BoardTest < Minitest::Test
     b = Board.new(grid_with_map('-'))
 
     assert_cell_closed(x: 0, y: 0)
-    refute cell(x: 0, y: 0).flaged?
+    refute cell(x: 0, y: 0).flagged?
 
     b.flag(x: 0, y: 0)
     assert_cell_closed(x: 0, y: 0)
-    assert cell(x: 0, y: 0).flaged?
+    assert cell(x: 0, y: 0).flagged?
 
     b.flag(x: 0, y: 0)
     assert_cell_closed(x: 0, y: 0)
-    refute cell(x: 0, y: 0).flaged?
+    refute cell(x: 0, y: 0).flagged?
   end
 
   def test_flagメソッドで枠外を指定
@@ -278,7 +278,7 @@ class BoardTest < Minitest::Test
 
     b.flag(x: 10, y: 10)
     refute cell(x: 10, y: 10)
-    refute cell(x: 0, y: 0).flaged?
+    refute cell(x: 0, y: 0).flagged?
   end
 
   def test_mineでないすべてのCellがopenされていればゲーム終了
